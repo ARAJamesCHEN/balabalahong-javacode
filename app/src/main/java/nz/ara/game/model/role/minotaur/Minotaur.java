@@ -11,9 +11,9 @@ import nz.ara.game.model.role.GameRole;
  */
 public class Minotaur extends GameRole {
 	private boolean hasEaten = false;
-	
+
 	private int canNotMove = 0;
-	
+
 	public boolean isHasEaten() {
 		return hasEaten;
 	}

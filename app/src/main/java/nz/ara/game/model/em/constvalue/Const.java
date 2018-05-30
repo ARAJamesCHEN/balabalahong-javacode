@@ -30,7 +30,7 @@ public enum Const {
 	LEVEL_FIVE("B=3,3;U=oooooooo,xxxxxoxo,oooooxoo,oxoooxoo,ooxooxoo,ooxxxooo,xxxxxxxo;L=oxxxxxo,ooxoooo,ooooxoo,oooxooo,oxxoxoo,xoooxoo,xxoxooo,oxxxxxo;M=2,4;T=2,1;E=5,0:"),
 	LEVEL_SIX("B=3,3;U=oooooooo,oxxxxoxo,oxoooooo,ooxooxoo,oooxoxoo,oooxoooo,oooooooo,oxxxxxxo;L=oooooooo,oxxxxxxo,oooxxxoo,ooxxoxoo,oooxoooo,xoxoxooo,xxxooooo,oxxxxxxo;M=5,3;T=1,1;E=5,0:"),
 	LEVEL_SEVEN("B=3,3;U=oooooooo,oxoxxxxo,ooxooxoo,oooooxoo,oooooooo,oxoooxoo,oooxoooo,oxxxxxxo;L=oooooooo,oxxxxxxo,xoooxooo,xooooooo,ooxxoooo,ooooxooo,oxoxxxoo,oxxxxxxo;M=1,5;T=5,5;E=2,0:"),
-	LEVEL_EIGHT("B=3,3;U=oxxxxxxxxxo,oxxoooooxoo,oooxooooxoo,ooxooxxxooo,oxooxooxxxo,oooxoxxxxoo,ooxoxooxxxo,ooooxoxxxoo,oxoxxxxxxxo,ooooooooooo;L=oooooooooo,xxxxxxxxoo,ooxoxoxxxo,oxoxxxxoxo,oxxxoooooo,xxoooxxooo,oxxxxoxooo,xxoooooxoo,ooxooooooo,oxoooooooo,xxxxxxxxoo;M=1,0;T=3,2;E=2,8:"),
+	LEVEL_EIGHT("B=3,3;U=oxxxxxxxxxo,oxxoooooxoo,oooxooooxoo,ooxooxxxooo,oxooxooxxxo,oooxoxxxxoo,ooxoxooxxxo,ooooxoxxxoo,oxoxxxxxxxo,ooooooooooo;L=oooooooooo,xxxxxxxxoo,ooxoxoxxxo,oxoxxxxoxo,oxxxoooooo,xxoooxxooo,oxxxxoxooo,xxoooooxoo,ooxooooooo,oxoooooooo,xxxxxxxxoo;M=3,2;T=1,0;E=2,8:"),
 	LEVEL_NINE("B=3,3;U=ooooooooooo,oxxxoxxxxxo,oxxoooxoooo,ooooooooooo,ooooxoooooo,ooxoooooooo,ooooooooxoo,ooooooooooo,ooooxoooooo,oxxxxxxxxxo;L=oooooooooo,oxxxxxxxxo,ooooxxxooo,oooooooooo,xoooxooooo,xoooxooooo,oooooooooo,oooooooooo,oooooooooo,ooooxxxxoo,oxxxxxxxxo;M=1,1;T=9,1;E=4,0:"),
 	LEVEL_TEN("B=3,3;U=oxxxxxxxxxo,oxoooooxoxo,ooooooooooo,ooooooooooo,oooxoooxooo,ooooooooooo,ooxoooooxoo,ooxoooxoooo,ooxxxxxxxxo;L=ooooooooo,ooooooooo,oxxxxxxxo,xooooxooo,oooooxxoo,ooooxoooo,oooxooxoo,ooxooooxo,oooooxooo,oxooooooo,xxxxxxxxo;M=2,0;T=3,1;E=1,0:")
 	
@@ -45,4 +45,5 @@ public enum Const {
 	public String getValue(){
         return value;
     }
+
 }

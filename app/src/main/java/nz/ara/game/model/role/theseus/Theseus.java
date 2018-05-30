@@ -10,7 +10,7 @@ import nz.ara.game.model.role.GameRole;
  *
  */
 public class Theseus extends GameRole {
-	
+
 	private boolean hasWon = false;
 
 	public boolean isHasWon() {
@@ -20,5 +20,5 @@ public class Theseus extends GameRole {
 	public void setHasWon(boolean hasWon) {
 		this.hasWon = hasWon;
 	}
-	
+
 }

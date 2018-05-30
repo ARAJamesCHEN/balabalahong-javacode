@@ -28,6 +28,8 @@ import nz.ara.game.model.util.tools.UtilTools;
  */
 public class GameImpl implements Game {
 
+	private String[] levels = {"Level-1","Level-2","Level-3","Level-4","Level-5","Level-6","Level-7","Level-8","Level-9","Level-10"};
+
 	private static final String TAG = "GameImpl";
 	
 	private int level = -1;
@@ -71,6 +73,24 @@ public class GameImpl implements Game {
 		this.level = level;
 		this.setUp(loadType);
 	}
+
+	public GameImpl(int level, int stepWidth, int stepHeight){
+		this.stepWidth = stepWidth;
+		this.stepHeight = stepHeight;
+		this.level = level;
+		this.setUp(null);
+	}
+
+	public GameImpl(String level_string, String filePath, Const loadType){
+
+		this.level = getLevelByLevelStr(level_string);
+
+		this.filePath = filePath;
+
+		Log.d(TAG, this.filePath);
+
+		this.setUp(loadType);
+	}
 	
 	private String setUp(Const loadType) {
 		
@@ -97,7 +117,12 @@ public class GameImpl implements Game {
 		try {
 			//to keep the loadable side and game side independent 
 			//as the game msg may change time by time
-			this.mazeBean = (MazeBean) UtilTools.copyObj(loadable.getMazeBean());
+			this.mazeBean = loadable.getMazeBean();//(MazeBean) UtilTools.copyObj(loadable.getMazeBean());
+
+			this.mazeBean.setWallAbovePointListStr(this.changePointListToStr(this.mazeBean.getWallAbovePointList()));;
+			this.mazeBean.setWallLeftPointListStr(this.changePointListToStr(this.mazeBean.getWallLeftPointList()));
+			this.mazeBean.setWallSquareStr(this.getWallSquareStr(this.level));
+
 		} catch (Exception e) {
 			Log.e(TAG,"has error when copy from loadable mazebean",e);
 		}
@@ -124,16 +149,17 @@ public class GameImpl implements Game {
 	 */
 	public boolean loadGameByFile(int theLevel) {
 		
-		this.moveCount = 0;
+		//this.moveCount = 0;
 		
 		boolean isLoaded = false;
 		
-		loadable = new LoadableImpl(theLevel, this.filePath);
+		loadable = new LoadableImpl(theLevel, this.filePath,this.stepWidth, this.stepHeight);
+
 		try {
-			loadable.loadByFile();
-			isLoaded = true;
+			isLoaded = loadable.loadByFile();
 		} catch (FileNotFoundException e) {
 			Log.e(TAG,e.getLocalizedMessage(),e);
+			isLoaded = false;
 		}
 		
 		return isLoaded;
@@ -143,13 +169,20 @@ public class GameImpl implements Game {
 	 * 21. load by string
 	 * @param theLevel
 	 */
-	public void loadGameByString(int theLevel) {
-		this.moveCount = 0;
-		loadable = new LoadableImpl(theLevel, this.filePath);
+	public boolean loadGameByString(int theLevel) {
+
+		boolean isLoaded = false;
+		//this.moveCount = 0;
+		loadable = new LoadableImpl(theLevel, this.filePath,this.stepWidth, this.stepHeight);
 		
 		String levelString = this.getLevelStringByConst(this.level);
 		Log.d(TAG,"Load from string: " + levelString);
+		if(UtilTools.isBlank(levelString)){
+			return false;
+		}
+
 		loadable.loadByString(levelString);
+		return true;
 	}
 	
 	/**
@@ -162,7 +195,7 @@ public class GameImpl implements Game {
 		try {
 			saveable = new SaveableImpl(this);
 			
-			Saver saver = new SaverImpl(this.level);
+			Saver saver = new SaverImpl(this.level,this.filePath);
 			
 			saver.save(saveable);
 		} catch (Exception e) {
@@ -178,14 +211,21 @@ public class GameImpl implements Game {
 	 * 22. reset or go to another level
 	 * @param aNewLevel
 	 */
-	public void reLoad(int aNewLevel) {
+	public void reLoad(int aNewLevel, Const loadType) {
 		if(aNewLevel<1) {
 			this.level = 1;
 		}
 		
 		this.level = aNewLevel;
 		
-		this.setUp(null);
+		this.setUp(Const.LOAD_BY_STR);
+	}
+
+	public void reLoad(String aNewLevelStr, Const loadType) {
+
+		int aNewLevel = this.getLevelByLevelStr(aNewLevelStr);
+
+		this.reLoad(aNewLevel,loadType);
 	}
 	
 	
@@ -199,39 +239,55 @@ public class GameImpl implements Game {
 		//19. Stops after exits
 		if(!this.status.equals(Const.STATUS_PLAY)) {
 			Log.e(TAG,"moveMinotaur error status:" + this.status);
+			this.minMoveCount = 0;
+			this.minotaur.setCanNotMove(0);
 			return;
 		}
-		
-		this.minMoveCount = 0;
-		this.minotaur.setCanNotMove(0);
-		
-		boolean hasFinish = false;
-		
-		while(!hasFinish) {
-			
-			Point thePosition = this.theseus.getPosition();
-			
-			Point minPoint = this.minotaur.getPosition();
-			
-			if(this.moveMinotaurLogic(thePosition, minPoint)) {
-				this.minMoveCount++;
-			}else {
-				int canNotMove = this.minotaur.getCanNotMove();
-				canNotMove++;
-				this.minotaur.setCanNotMove(canNotMove);
-			}
-			
-			if((this.minMoveCount + this.minotaur.getCanNotMove())>=2) {
-				hasFinish = true;
-				this.minMoveCount = 0;
-				this.minotaur.setCanNotMove(0);
-			}
+
+		Point thePosition = this.theseus.getPosition();
+
+		Point minPoint = this.minotaur.getPosition();
+
+		if(this.moveMinotaurLogic(thePosition, minPoint)) {
+			this.minMoveCount++;
+		}else {
+			int canNotMove = this.minotaur.getCanNotMove();
+			canNotMove++;
+			this.minotaur.setCanNotMove(canNotMove);
 		}
+
+		if((this.minMoveCount + this.minotaur.getCanNotMove())>=2) {
+			this.minMoveCount = 0;
+			this.minotaur.setCanNotMove(0);
+		}
+
 		
+	}
+
+	public boolean shouldMoveMin(){
+		if((this.minMoveCount + this.minotaur.getCanNotMove())<2) {
+
+			return true;
+
+		}
+		return false;
 	}
 	
 	
 	public boolean moveMinotaurLogic(Point thePosition, Point minPoint) {
+
+		if(thePosition.across() == minPoint.across()
+				&& thePosition.down() == minPoint.down()){
+
+			if(this.checkEaten()) {
+				Log.d(TAG,"Killed!");
+				this.minotaur.setHasEaten(true);
+				this.status = Const.STATUS_EATEN;
+			}
+
+			return true;
+		}
+
 		if(this.moveMinotaurHorizontally(thePosition,minPoint)) {
 			return true;
 		}
@@ -587,6 +643,76 @@ public class GameImpl implements Game {
     	}
     }
 
+	public int getLevelByLevelStr(String levelStr) {
+		switch(levelStr) {
+			case "Level-1":
+				return 1;
+			case "Level-2":
+				return 2;
+			case "Level-3":
+				return 3;
+			case "Level-4":
+				return 4;
+			case "Level-5":
+				return 5;
+			case "Level-6":
+				return 6;
+			case "Level-7":
+				return 7;
+			case "Level-8":
+				return 8;
+			case "Level-9":
+				return 9;
+			case "Level-10":
+				return 10;
+			default:
+				return 1;
+		}
+	}
+
+	public String getWallSquareStr(int level) {
+		switch(level) {
+			case 1:
+				return "4,4";
+			case 2:
+				return "8,8";
+			case 3:
+				return "5,5";
+			case 4:
+				return "7,7";
+			case 5:
+				return "8,8";
+			case 6:
+				return "8,8";
+			case 7:
+				return "8,8";
+			case 8:
+				return "11,11";
+			case 9:
+				return "11,11";
+			case 10:
+				return "11,11";
+			default:
+				return "4,4";
+		}
+	}
+
+	private String changePointListToStr(List<Point> wallPoints){
+
+		String result = "";
+
+		for(int i= 0; i<wallPoints.size(); i++){
+			result+= wallPoints.get(i).across() + "," + wallPoints.get(i).down();
+
+			if(i != (wallPoints.size()-1)){
+				result+="|";
+			}
+
+		}
+
+		return result;
+	}
+
 	public int getLevel() {
 		return level;
 	}
@@ -677,4 +803,11 @@ public class GameImpl implements Game {
 		this.moveCount = moveCount;
 	}
 
+	public String[] getLevels() {
+		return levels;
+	}
+
+	public void setLevels(String[] levels) {
+		this.levels = levels;
+	}
 }

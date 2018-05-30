@@ -3,7 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/balabalahong.iml" filepath="$PROJECT_DIR$/balabalahong.iml" />
+      <module fileurl="file://C:\Users\yac0105\OneDrive - Ara Institute of Canterbury\2018Semester1\282\ASS\Ass2\1MyWorks\Project\java\0531\balabalahong-javacode\app\app.iml" filepath="C:\Users\yac0105\OneDrive - Ara Institute of Canterbury\2018Semester1\282\ASS\Ass2\1MyWorks\Project\java\0531\balabalahong-javacode\app\app.iml" />
+      <module fileurl="file://C:\Users\yac0105\OneDrive - Ara Institute of Canterbury\2018Semester1\282\ASS\Ass2\1MyWorks\Project\java\0531\balabalahong-javacode\balabalahong.iml" filepath="C:\Users\yac0105\OneDrive - Ara Institute of Canterbury\2018Semester1\282\ASS\Ass2\1MyWorks\Project\java\0531\balabalahong-javacode\balabalahong.iml" />
+      <module fileurl="file://$PROJECT_DIR$/balabalahong-javacode.iml" filepath="$PROJECT_DIR$/balabalahong-javacode.iml" />
       <module fileurl="file://C:\Users\yac0105\OneDrive - Ara Institute of Canterbury\2018Semester1\282\ASS\Ass2\1MyWorks\Project\0514\balabalahong\game.iml" filepath="C:\Users\yac0105\OneDrive - Ara Institute of Canterbury\2018Semester1\282\ASS\Ass2\1MyWorks\Project\0514\balabalahong\game.iml" />
     </modules>
   </component>

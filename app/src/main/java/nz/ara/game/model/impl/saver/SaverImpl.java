@@ -36,9 +36,12 @@ public class SaverImpl implements Saver {
 	private static final String TAG = "SaverImpl";
 	
 	private int level = 0;
+
+	private String filePath;
 	
-	public SaverImpl(int level) {
+	public SaverImpl(int level, String filePath) {
 		this.level = level;
+		this.filePath = filePath;
 	}
 
     public String buildLevelMsgAsString(Saveable savable) {
@@ -163,18 +166,16 @@ public class SaverImpl implements Saver {
 	@Override
 	public void save(Saveable savable) {
 		
-		String thePath = Const.FILE_PATH.getValue();
-		
-		if(!Const.FILE_PATH.getValue().endsWith(File.separator)) {
-			thePath += File.separator;
+		if(!filePath.endsWith(File.separator)) {
+			filePath += File.separator;
 		}
 		
-		File f = new File(thePath);
+		File f = new File(filePath);
 		if (!f.exists()|| !f.isDirectory()) {
 		   f.mkdir();
 		}
 		
-		String fileName = thePath + Const.LEVEL_FILE_NAME.getValue();
+		String fileName = filePath + Const.LEVEL_FILE_NAME.getValue();
 		
 		this.save(savable, fileName);
 	}
@@ -205,6 +206,11 @@ public class SaverImpl implements Saver {
 	}
 	
 	private void writeMsgToFile(int level, String fileName, String content) {
+
+		System.setProperty("javax.xml.stream.XMLInputFactory", "com.fasterxml.aalto.stax.InputFactoryImpl");
+		System.setProperty("javax.xml.stream.XMLOutputFactory", "com.fasterxml.aalto.stax.OutputFactoryImpl");
+		System.setProperty("javax.xml.stream.XMLEventFactory", "com.fasterxml.aalto.stax.EventFactoryImpl");
+
 		
 		FileInputStream fis = null;
 		
@@ -247,7 +253,7 @@ public class SaverImpl implements Saver {
 					if(rowNum == 3 + 6*(level-1)) {
 	                	try {
 							CellRangeAddress cellMerge = new CellRangeAddress(rowNum, rowNum, 8, maxCol);
-							spreadsheet.addMergedRegion(cellMerge);
+							//spreadsheet.addMergedRegion(cellMerge);
 						} catch (Exception e) {
 							Log.e(TAG,"some issures for creating the merge area");
 						}
@@ -307,7 +313,7 @@ public class SaverImpl implements Saver {
 						        	 
 						        	 try {
 										CellRangeAddress cellMerge = new CellRangeAddress(rowNum, rowNum, 8, maxCol);
-										 spreadsheet.addMergedRegion(cellMerge);
+										 //spreadsheet.addMergedRegion(cellMerge);
 									} catch (Exception e) {
 										
 										Log.e(TAG,"some issures for creating the merge area");
@@ -347,7 +353,7 @@ public class SaverImpl implements Saver {
                     	 
                     	 try {
 							CellRangeAddress cellMerge = new CellRangeAddress(rowNum, rowNum, 8, maxCol);
-							 spreadsheet.addMergedRegion(cellMerge);
+							 //spreadsheet.addMergedRegion(cellMerge);
 						} catch (Exception e) {
 							Log.e(TAG,"some issures for creating the merge area");
 						}
@@ -381,7 +387,7 @@ public class SaverImpl implements Saver {
 	 	                	cell0.setCellValue("Level:" + level + ":");
 							
 							CellRangeAddress cellMerge = new CellRangeAddress(rowNum, rowNum, 8, maxCol);
-							spreadsheet.addMergedRegion(cellMerge);
+							//spreadsheet.addMergedRegion(cellMerge);
 		                	Cell cell = row.getCell(8);
 		                	//Adding values to cell
 		                    cell.setCellValue(content);
