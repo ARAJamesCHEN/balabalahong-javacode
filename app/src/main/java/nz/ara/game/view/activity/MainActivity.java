@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
 import android.media.MediaPlayer;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -26,6 +27,8 @@ import com.example.yac0105.game.databinding.ActivityMainBinding;
 import java.io.File;
 
 import nz.ara.game.model.em.constvalue.Const;
+import nz.ara.game.view.util.DisplayParams;
+import nz.ara.game.view.util.DisplayUtil;
 import nz.ara.game.view.views.MapView;
 import nz.ara.game.view.views.RoleView;
 import nz.ara.game.viewmodel.MainViewModel;
@@ -90,10 +93,20 @@ public class MainActivity extends AppCompatActivity {
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        mapView = findViewById(R.id.mapview);
+        DisplayParams displayParams = DisplayParams.getInstance(context);
+
+        ConstraintLayout constraintLayout = findViewById(R.id.constraintLayout);
+
+        FrameLayout f = new FrameLayout(this);
+        f.setId(200 + (int) (200 * Math.random()));
+        //30%
+        f.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, DisplayUtil.dip2px((int)(displayParams.screenHeight*0.3), displayParams.scale)));
+        constraintLayout.addView(f);
+
+        //mapView = new MapView(this, getAssets().);
 
         if(mapView == null){
-            FrameLayout f = findViewById(R.id.frameLayout);
+            //FrameLayout f = findViewById(R.id.frameLayout);
 
             mapView = (MapView)f.getChildAt(0);
 
