@@ -16,6 +16,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.Spinner;
@@ -97,15 +98,31 @@ public class MainActivity extends AppCompatActivity {
 
         ConstraintLayout constraintLayout = findViewById(R.id.constraintLayout);
 
+        ConstraintLayout.LayoutParams layoutParams;
+
+        int dpToPix_8 = DisplayUtil.dip2px(8, displayParams.scale);
+
+
+        textViewName = new TextView(this);
+        textViewName.setId(R.id.textView_move_name);
+        textViewName.setText(R.string.text_mvcount_name);
+        layoutParams = new ConstraintLayout.LayoutParams(DisplayUtil.dip2px(85, displayParams.scale), DisplayUtil.dip2px(28, displayParams.scale));
+
+        layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+
+        textViewName.setLayoutParams(layoutParams);
+
         FrameLayout f = new FrameLayout(this);
         f.setId(200 + (int) (200 * Math.random()));
         //30%
         f.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, DisplayUtil.dip2px((int)(displayParams.screenHeight*0.3), displayParams.scale)));
         constraintLayout.addView(f);
 
+
+
         //mapView = new MapView(this, getAssets().);
 
-        if(mapView == null){
+        /*if(mapView == null){
             //FrameLayout f = findViewById(R.id.frameLayout);
 
             mapView = (MapView)f.getChildAt(0);
@@ -121,10 +138,15 @@ public class MainActivity extends AppCompatActivity {
                     return roleViewOnTouched(event);
                 }
             });
-        }
+        }*/
 
 
-        level_spinner = findViewById(R.id.level_spinner);
+        level_spinner = new Spinner(this);
+        level_spinner.setPromptId(R.string.level_prompt);
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
+                this, android.R.layout.simple_spinner_item, mainViewModel.getLevels() );
+        level_spinner.setAdapter(spinnerArrayAdapter);
+        level_spinner.setLayoutParams(new ConstraintLayout.LayoutParams(DisplayUtil.dip2px(136, displayParams.scale), DisplayUtil.dip2px(42, displayParams.scale)));
 
         level_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -142,9 +164,9 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        constraintLayout.addView(level_spinner);
 
-
-        reset = findViewById(R.id.button_reset);
+        /*reset = new Button(this);
 
         reset.setOnClickListener(
             new View.OnClickListener() {
@@ -155,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
             }
         );
 
-        pause = findViewById(R.id.button_pause);
+        pause = new Button(this);
 
         pause.setOnClickListener(
                 new View.OnClickListener() {
@@ -166,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
 
-        save = findViewById(R.id.button_save);
+        save = new Button(this);
 
         save.setOnClickListener(
                 new View.OnClickListener() {
@@ -178,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
         );
 
 
-        loadByFile = findViewById(R.id.button_new);
+        loadByFile = new Button(this);
 
         loadByFile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,7 +209,7 @@ public class MainActivity extends AppCompatActivity {
             }}
         );
 
-        help = findViewById(R.id.button_help);
+        help = new Button(this);
 
         help.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
 
         if(mainViewModel == null){
             mainViewModel = new MainViewModel(this,level_string);
-        }
+        }*/
 
         binding.setMainViewModel(mainViewModel);
 
