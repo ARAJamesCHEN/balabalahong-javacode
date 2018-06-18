@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.databinding.DataBindingUtil;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -23,7 +24,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.yac0105.game.R;
-import com.example.yac0105.game.databinding.ActivityMainBinding;
+//import com.example.yac0105.game.databinding.ActivityMainBinding;
 
 import java.io.File;
 
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView textViewName;
 
+    private TextView textViewMoveCount;
+
     private Button reset;
 
     private Button pause;
@@ -58,13 +61,15 @@ public class MainActivity extends AppCompatActivity {
 
     private Button help;
 
+    private Button more;
+
     private String level_string = "Level-1";
 
     private MainViewModel mainViewModel;
 
     private Context context;
 
-    private ActivityMainBinding binding;
+   // private ActivityMainBinding binding;
 
     private int rolePointXShort = 100;
 
@@ -92,7 +97,12 @@ public class MainActivity extends AppCompatActivity {
 
         context = this;
 
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        if(mainViewModel == null){
+            mainViewModel = new MainViewModel(this,level_string);
+        }
+
+        setContentView(R.layout.activity_main);
+
 
         DisplayParams displayParams = DisplayParams.getInstance(context);
 
@@ -100,48 +110,110 @@ public class MainActivity extends AppCompatActivity {
 
         ConstraintLayout.LayoutParams layoutParams;
 
+        layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
+
+
+        constraintLayout.setLayoutParams(layoutParams);
+
+
         int dpToPix_8 = DisplayUtil.dip2px(8, displayParams.scale);
 
-
+        //Move Count:
         textViewName = new TextView(this);
         textViewName.setId(R.id.textView_move_name);
         textViewName.setText(R.string.text_mvcount_name);
+
+        constraintLayout.addView(textViewName);
+
+        setContentView(constraintLayout);
+
         layoutParams = new ConstraintLayout.LayoutParams(DisplayUtil.dip2px(85, displayParams.scale), DisplayUtil.dip2px(28, displayParams.scale));
 
         layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
 
         textViewName.setLayoutParams(layoutParams);
 
+
+        //moveCount
+        textViewMoveCount = new TextView(this);
+        textViewMoveCount.setId(R.id.textView2);
+
+
+        textViewMoveCount.setText(mainViewModel.moveCount.get());
+        layoutParams = new ConstraintLayout.LayoutParams(DisplayUtil.dip2px(113, displayParams.scale), DisplayUtil.dip2px(27, displayParams.scale));
+
+        layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+        textViewName.setLayoutParams(layoutParams);
+        constraintLayout.addView(textViewMoveCount);
+
+
+        help  = new Button(this);
+        help.setId(R.id.button_help);
+        help.setText(R.string.button_help_name);
+        layoutParams = new ConstraintLayout.LayoutParams(DisplayUtil.dip2px(97, displayParams.scale), DisplayUtil.dip2px(37, displayParams.scale));
+
+        layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+        help.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                helpButtonClicked();
+            }}
+        );
+        constraintLayout.addView(help);
+
+        // FrameLayout
         FrameLayout f = new FrameLayout(this);
-        f.setId(200 + (int) (200 * Math.random()));
-        //30%
-        f.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, DisplayUtil.dip2px((int)(displayParams.screenHeight*0.3), displayParams.scale)));
+        f.setId(R.id.frameLayout);
+
+        FrameLayout.LayoutParams fLayoutParames = new FrameLayout.LayoutParams(DisplayUtil.dip2px(368, displayParams.scale), DisplayUtil.dip2px(342, displayParams.scale));
+        fLayoutParames.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+        f.setLayoutParams(fLayoutParames);
         constraintLayout.addView(f);
 
+        //30%
+       // f.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, DisplayUtil.dip2px((int)(displayParams.screenHeight*0.3), displayParams.scale)));
+
+        mapView = new MapView(this);
+        mapView.setId(R.id.mapview);
+        layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
+        mapView.setLayoutParams(layoutParams);
+        mapView.setBackgroundColor(getResources().getColor(R.color.colorWhite));
+        mapView.setItemsWallAboveStr(mainViewModel.wallAbovePointListStr.get());
+        mapView.setItemsWallLeftStr(mainViewModel.wallLeftPointListStr.get());
+        mapView.setWallSquareStr(mainViewModel.wallSquareStr.get());
+
+        f.addView(mapView, 0);
+
+        theView = new RoleView(this,getResources().getString(R.string.ROLE_TYPE_THESEUS));
+        layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
+        theView.setLayoutParams(layoutParams);
+        theView.setBackgroundColor(Color.TRANSPARENT);
+        theView.setHeightStr(mainViewModel.heightStr.get());
+        theView.setPointStr(mainViewModel.thePointStr.get());
+        theView.setWallSquareStr(mainViewModel.wallSquareStr.get());
+        theView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                return roleViewOnTouched(event);
+            }
+        });
+        theView.bringToFront();
+        f.addView(theView,1);
 
 
-        //mapView = new MapView(this, getAssets().);
-
-        /*if(mapView == null){
-            //FrameLayout f = findViewById(R.id.frameLayout);
-
-            mapView = (MapView)f.getChildAt(0);
-
-            theView = (RoleView)f.getChildAt(1);
-
-            minView = (RoleView)f.getChildAt(2);
-
-            theView.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-
-                    return roleViewOnTouched(event);
-                }
-            });
-        }*/
+        minView = new RoleView(this,getResources().getString(R.string.ROLE_TYPE_MINOTAUR));
+        layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
+        minView.setLayoutParams(layoutParams);
+        minView.setBackgroundColor(Color.TRANSPARENT);
+        minView.setHeightStr(mainViewModel.heightStr.get());
+        minView.setPointStr(mainViewModel.minPointStr.get());
+        minView.setWallSquareStr(mainViewModel.wallSquareStr.get());
+        f.addView(minView,2);
 
 
         level_spinner = new Spinner(this);
+        level_spinner.setId(R.id.level_spinner);
         level_spinner.setPromptId(R.string.level_prompt);
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, mainViewModel.getLevels() );
@@ -166,7 +238,16 @@ public class MainActivity extends AppCompatActivity {
         });
         constraintLayout.addView(level_spinner);
 
-        /*reset = new Button(this);
+        //reset
+        reset = new Button(this);
+        reset.setId(R.id.button_reset);
+        reset.setText(R.string.button_reset_name);
+
+        layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+
+        layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+
+        reset.setLayoutParams(layoutParams);
 
         reset.setOnClickListener(
             new View.OnClickListener() {
@@ -176,8 +257,17 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         );
+        constraintLayout.addView(reset);
 
         pause = new Button(this);
+        pause.setId(R.id.button_pause);
+        pause.setText(R.string.button_pause_name);
+
+        layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+
+        layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+
+        pause.setLayoutParams(layoutParams);
 
         pause.setOnClickListener(
                 new View.OnClickListener() {
@@ -187,8 +277,17 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
+        constraintLayout.addView(pause);
 
         save = new Button(this);
+        save.setId(R.id.button_save);
+        save.setText(R.string.button_new_name);
+
+        layoutParams = new ConstraintLayout.LayoutParams(DisplayUtil.dip2px(113, displayParams.scale), DisplayUtil.dip2px(49, displayParams.scale));
+
+        layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+
+        save.setLayoutParams(layoutParams);
 
         save.setOnClickListener(
                 new View.OnClickListener() {
@@ -198,9 +297,17 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
         );
-
+        constraintLayout.addView(save);
 
         loadByFile = new Button(this);
+        loadByFile.setId(R.id.button_new);
+        loadByFile.setText(R.string.button_new_name);
+
+        layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+
+        layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+
+        loadByFile.setLayoutParams(layoutParams);
 
         loadByFile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,21 +315,25 @@ public class MainActivity extends AppCompatActivity {
                 loadByFileButtonClicked();
             }}
         );
+        constraintLayout.addView(loadByFile);
 
-        help = new Button(this);
 
-        help.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                helpButtonClicked();
-            }}
-        );
+        more = new  Button(this);
+        more.setId(R.id.button_more);
+        more.setText(R.string.button_more_name);
+        layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+
+        layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+
+        more.setLayoutParams(layoutParams);
 
         if(mainViewModel == null){
             mainViewModel = new MainViewModel(this,level_string);
-        }*/
+        }
 
-        binding.setMainViewModel(mainViewModel);
+        //binding.setMainViewModel(mainViewModel);*/
+
+
 
     }
 

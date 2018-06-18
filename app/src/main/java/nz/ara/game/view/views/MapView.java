@@ -58,6 +58,13 @@ public class MapView extends View {
     private int mHeight = this.getMeasuredHeight();
     private int mWidth = this.getMeasuredHeight();
 
+    public MapView(Context context){
+        super(context);
+
+        this.drawMapByAttrs();
+
+    }
+
     public MapView(Context context, AttributeSet attrs){
         super(context,attrs );
 

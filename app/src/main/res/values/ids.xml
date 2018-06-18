@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="textView_move_name" type="id" />
+    <item name="textView2" type="id" />
+    <item name="frameLayout" type="id" />
+    <item name="mapview" type="id" />
+    <item name="theview" type="id" />
+    <item name="minview" type="id" />
+    <item name="level_spinner" type="id" />
+    <item name="button_reset" type="id" />
+    <item name="button_pause" type="id" />
+    <item name="button_help" type="id" />
+    <item name="button_save" type="id" />
+    <item name="button_more" type="id" />
+    <item name="guideline" type="id" />
+    <item name="button_new" type="id" />
+    <item name="guideline2" type="id" />
+
 </resources>

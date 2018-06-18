@@ -19,6 +19,8 @@ import android.widget.TextView;
 
 import com.example.yac0105.game.R;
 
+import org.apache.xmlbeans.impl.xb.ltgfmt.FileDesc;
+
 import nz.ara.game.viewmodel.MainViewModel;
 
 /**
@@ -60,6 +62,13 @@ public class RoleView extends View {
     private Paint drawPaint;
 
     private Path path = new Path();
+
+    public RoleView(Context context, String roleStr){
+
+        super(context);
+
+        this.roleStr = roleStr;
+    }
 
     public RoleView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
