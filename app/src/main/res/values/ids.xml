@@ -12,8 +12,8 @@
     <item name="button_help" type="id" />
     <item name="button_save" type="id" />
     <item name="button_more" type="id" />
-    <item name="guideline" type="id" />
-    <item name="button_new" type="id" />
+    <item name="guideline1" type="id" />
+    <item name="button_load_from_file" type="id" />
     <item name="guideline2" type="id" />
 
 </resources>

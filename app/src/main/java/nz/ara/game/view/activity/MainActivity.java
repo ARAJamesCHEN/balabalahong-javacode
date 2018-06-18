@@ -9,9 +9,10 @@ import android.databinding.DataBindingUtil;
 import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-
+import android.support.constraint.Guideline;
 import android.util.Log;
 
 import android.view.MotionEvent;
@@ -39,6 +40,8 @@ import nz.ara.game.viewmodel.MainViewModel;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
+
+    ConstraintSet constraintSet;
 
     private Spinner level_spinner;
 
@@ -71,6 +74,11 @@ public class MainActivity extends AppCompatActivity {
     private Context context;
 
     ConstraintLayout constraintLayout;
+
+    Guideline guideline1;
+
+
+    Guideline guideline2;
 
    // private ActivityMainBinding binding;
 
@@ -118,6 +126,11 @@ public class MainActivity extends AppCompatActivity {
 
         constraintLayout.setLayoutParams(layoutParams);
 
+        setContentView(constraintLayout);
+//https://stackoverflow.com/questions/41670618/android-how-to-programatically-set-layout-constraintright-torightof-parent
+        //https://juejin.im/entry/58b2fd59570c350069704265
+
+
 
         int dpToPix_8 = DisplayUtil.dip2px(8, displayParams.scale);
 
@@ -128,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
 
         constraintLayout.addView(textViewName);
 
-        setContentView(constraintLayout);
+
 
         layoutParams = new ConstraintLayout.LayoutParams(DisplayUtil.dip2px(85, displayParams.scale), DisplayUtil.dip2px(28, displayParams.scale));
 
@@ -173,8 +186,6 @@ public class MainActivity extends AppCompatActivity {
         f.setLayoutParams(fLayoutParames);
 
 
-        //30%
-       // f.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, DisplayUtil.dip2px((int)(displayParams.screenHeight*0.3), displayParams.scale)));
 
         mapView = new MapView(this);
         mapView.setId(R.id.mapview);
@@ -284,6 +295,20 @@ public class MainActivity extends AppCompatActivity {
         );
         constraintLayout.addView(pause);
 
+        guideline1 = new Guideline(this);
+        guideline1.setId(R.id.guideline1);
+        layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.orientation = ConstraintLayout.LayoutParams.HORIZONTAL;
+        guideline1.setLayoutParams(layoutParams);
+        constraintLayout.addView(guideline1);
+
+        guideline2.setId(R.id.guideline2);
+        layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.orientation = ConstraintLayout.LayoutParams.VERTICAL;
+        guideline2.setLayoutParams(layoutParams);
+        constraintLayout.addView(guideline2);
+
+
         save = new Button(this);
         save.setId(R.id.button_save);
         save.setText(R.string.button_new_name);
@@ -305,7 +330,7 @@ public class MainActivity extends AppCompatActivity {
         constraintLayout.addView(save);
 
         loadByFile = new Button(this);
-        loadByFile.setId(R.id.button_new);
+        loadByFile.setId(R.id.button_load_from_file);
         loadByFile.setText(R.string.button_new_name);
 
         layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
@@ -336,10 +361,51 @@ public class MainActivity extends AppCompatActivity {
             mainViewModel = new MainViewModel(this,level_string);
         }
 
-        //binding.setMainViewModel(mainViewModel);*/
+        constraintSet = new ConstraintSet();
+        constraintSet.clone(constraintLayout);
+        constraintSet.connect(f.getId(), ConstraintSet.BOTTOM, reset.getId(), ConstraintSet.TOP, 0);
+        constraintSet.connect(f.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END, 0);
+        constraintSet.connect(f.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START, 0);
+
+        constraintSet.connect(level_spinner.getId(), ConstraintSet.BOTTOM, loadByFile.getId(), ConstraintSet.TOP, 0);
+        constraintSet.connect(level_spinner.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START, 0);
+        constraintSet.connect(level_spinner.getId(), ConstraintSet.TOP, f.getId(), ConstraintSet.BOTTOM, 0);
+
+        constraintSet.connect(reset.getId(), ConstraintSet.BOTTOM, save.getId(), ConstraintSet.TOP, 0);
+        constraintSet.connect(reset.getId(), ConstraintSet.END, save.getId(), ConstraintSet.START, 0);
 
 
+        constraintSet.connect(pause.getId(), ConstraintSet.BASELINE, reset.getId(), ConstraintSet.BASELINE, 0);
+        constraintSet.connect(pause.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END, 0);
 
+        constraintSet.setGuidelineBegin(guideline1.getId(), DisplayUtil.dip2px(451, displayParams.scale));
+
+        constraintSet.connect(save.getId(), ConstraintSet.BASELINE, loadByFile.getId(), ConstraintSet.BASELINE, 0);
+        constraintSet.connect(save.getId(), ConstraintSet.END, more.getId(), ConstraintSet.START, 0);
+
+        constraintSet.connect(more.getId(), ConstraintSet.BASELINE, save.getId(), ConstraintSet.BASELINE, 0);
+        constraintSet.connect(more.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END, 0);
+
+        constraintSet.connect(loadByFile.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM, 0);
+        constraintSet.connect(loadByFile.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START, 0);
+
+
+        constraintSet.connect(textViewName.getId(), ConstraintSet.BASELINE, textViewMoveCount.getId(), ConstraintSet.BASELINE, 0);
+        constraintSet.connect(textViewName.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START, 0);
+
+        constraintSet.connect(textViewMoveCount.getId(), ConstraintSet.BOTTOM, f.getId(), ConstraintSet.TOP, 0);
+        constraintSet.connect(textViewMoveCount.getId(), ConstraintSet.START, textViewName.getId(), ConstraintSet.END, 0);
+        constraintSet.connect(textViewMoveCount.getId(), ConstraintSet.TOP, constraintLayout.getId(), ConstraintSet.TOP, 0);
+
+        constraintSet.setGuidelineBegin(guideline2.getId(), DisplayUtil.dip2px(264, displayParams.scale));
+
+        constraintSet.connect(help.getId(), ConstraintSet.BASELINE, textViewMoveCount.getId(), ConstraintSet.BASELINE, 0);
+        constraintSet.connect(help.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END, 0);
+        constraintSet.setHorizontalBias(help.getId(),0.0F);
+        constraintSet.connect(help.getId(), ConstraintSet.START, textViewMoveCount.getId(), ConstraintSet.END, 0);
+
+
+        constraintSet.applyTo(constraintLayout);
     }
 
     private boolean roleViewOnTouched(MotionEvent event){
