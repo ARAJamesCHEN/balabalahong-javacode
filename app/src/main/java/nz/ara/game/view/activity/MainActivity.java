@@ -302,6 +302,7 @@ public class MainActivity extends AppCompatActivity {
         guideline1.setLayoutParams(layoutParams);
         constraintLayout.addView(guideline1);
 
+        guideline2 = new Guideline(this);
         guideline2.setId(R.id.guideline2);
         layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
         layoutParams.orientation = ConstraintLayout.LayoutParams.VERTICAL;
