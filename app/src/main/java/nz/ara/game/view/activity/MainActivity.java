@@ -29,6 +29,7 @@ import com.example.yac0105.game.R;
 import java.io.File;
 
 import nz.ara.game.model.em.constvalue.Const;
+import nz.ara.game.view.adapter.ViewBindingAdapter;
 import nz.ara.game.view.util.DisplayParams;
 import nz.ara.game.view.util.DisplayUtil;
 import nz.ara.game.view.views.MapView;
@@ -69,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
 
     private Context context;
 
+    ConstraintLayout constraintLayout;
+
    // private ActivityMainBinding binding;
 
     private int rolePointXShort = 100;
@@ -106,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
 
         DisplayParams displayParams = DisplayParams.getInstance(context);
 
-        ConstraintLayout constraintLayout = findViewById(R.id.constraintLayout);
+        constraintLayout = findViewById(R.id.constraintLayout);
 
         ConstraintLayout.LayoutParams layoutParams;
 
@@ -168,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
         FrameLayout.LayoutParams fLayoutParames = new FrameLayout.LayoutParams(DisplayUtil.dip2px(368, displayParams.scale), DisplayUtil.dip2px(342, displayParams.scale));
         fLayoutParames.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
         f.setLayoutParams(fLayoutParames);
-        constraintLayout.addView(f);
+
 
         //30%
        // f.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, DisplayUtil.dip2px((int)(displayParams.screenHeight*0.3), displayParams.scale)));
@@ -211,6 +214,8 @@ public class MainActivity extends AppCompatActivity {
         minView.setWallSquareStr(mainViewModel.wallSquareStr.get());
         f.addView(minView,2);
 
+
+        constraintLayout.addView(f);
 
         level_spinner = new Spinner(this);
         level_spinner.setId(R.id.level_spinner);
@@ -349,6 +354,9 @@ public class MainActivity extends AppCompatActivity {
                 startY=event.getY();
 
                 if(mainViewModel.moveThe(rolePointXShort,rolePointXLong,rolePointYShort,rolePointYLong,startX,startY)){
+
+                    setParas();
+
                     theView.invalidate();
 
                     if(mainViewModel.getGameModel().getTheseus().isHasWon()){
@@ -363,8 +371,10 @@ public class MainActivity extends AppCompatActivity {
                         playLost();
                         minKillTheDialog();
                     }
-
+                    setParas();
                     minView.invalidate();
+
+                    //MapView m = (MapView)constraintLayout.getViewById(R.id.minview);
                 }
 
                 break;
@@ -379,7 +389,7 @@ public class MainActivity extends AppCompatActivity {
                         playLost();
                         minKillTheDialog();
                     }
-
+                    setParas();
                     minView.invalidate();
                 }
                 break;
@@ -387,8 +397,22 @@ public class MainActivity extends AppCompatActivity {
                 return false;
         }
 
+
         Log.d(TAG, "Touch Event::" + event.getAction());
         return true;
+    }
+
+    private void setParas(){
+        ViewBindingAdapter.setThePointStr(mapView, mainViewModel.thePointStr.get());
+        ViewBindingAdapter.setHeightStr(theView, mainViewModel.heightStr.get());
+        ViewBindingAdapter.setItemsWallAboveStr(mapView, mainViewModel.wallAbovePointListStr.get());
+        ViewBindingAdapter.setItemsWallLeftStr(mapView, mainViewModel.wallLeftPointListStr.get());
+        ViewBindingAdapter.setMinPointStr(mapView, mainViewModel.minPointStr.get());
+        ViewBindingAdapter.setPointStr(theView, mainViewModel.thePointStr.get());
+        ViewBindingAdapter.setPointStr(minView,mainViewModel.minPointStr.get());
+        ViewBindingAdapter.setWallSquareStr(mapView, mainViewModel.wallSquareStr.get());
+        minView.setWallSquareStr(mainViewModel.wallSquareStr.get());
+        theView.setWallSquareStr(mainViewModel.wallSquareStr.get());
     }
 
 
@@ -405,6 +429,7 @@ public class MainActivity extends AppCompatActivity {
             }else{
                 mainViewModel.initGameImpl(aNewlevel_string);
                 theView.bringToFront();
+                setParas();
                 mapView.invalidate();
                 theView.invalidate();
                 minView.invalidate();
@@ -414,6 +439,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void resetButtonClicked(){
         mainViewModel.initGameImpl(level_string);
+        setParas();
         theView.bringToFront();
         mapView.invalidate();
         theView.invalidate();
@@ -426,7 +452,7 @@ public class MainActivity extends AppCompatActivity {
         mainViewModel.moveMin();
 
         if(mainViewModel.getGameModel().getMinotaur().isHasEaten()){
-
+            setParas();
             minView.bringToFront();
             playLost();
             minKillTheDialog();

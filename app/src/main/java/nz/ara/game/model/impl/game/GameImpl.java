@@ -671,30 +671,43 @@ public class GameImpl implements Game {
 	}
 
 	public String getWallSquareStr(int level) {
+
+	    String wallStr = "4,4";
+
 		switch(level) {
 			case 1:
-				return "4,4";
+                wallStr = "4,4";
+                break;
 			case 2:
-				return "8,8";
+                wallStr = "8,8";
+                break;
 			case 3:
-				return "5,5";
+                wallStr = "5,5";
+                break;
 			case 4:
-				return "7,7";
+                wallStr = "7,7";
+                break;
 			case 5:
-				return "8,8";
+                wallStr = "8,8";
+                break;
 			case 6:
-				return "8,8";
+                wallStr = "8,8";
+                break;
 			case 7:
-				return "8,8";
+                wallStr = "8,8";
+                break;
 			case 8:
-				return "11,11";
+                wallStr = "11,11";
+                break;
 			case 9:
-				return "11,11";
+                wallStr = "11,11";
+                break;
 			case 10:
-				return "11,11";
-			default:
-				return "4,4";
+                wallStr = "11,11";
+                break;
 		}
+
+		return wallStr;
 	}
 
 	private String changePointListToStr(List<Point> wallPoints){
