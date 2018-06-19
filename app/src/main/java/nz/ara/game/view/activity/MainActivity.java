@@ -122,12 +122,12 @@ public class MainActivity extends AppCompatActivity {
         ConstraintLayout.LayoutParams layoutParams;
 
         layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
-
+        layoutParams.editorAbsoluteX =  DisplayUtil.dip2px(81, displayParams.scale);
 
         constraintLayout.setLayoutParams(layoutParams);
 
         setContentView(constraintLayout);
-//https://stackoverflow.com/questions/41670618/android-how-to-programatically-set-layout-constraintright-torightof-parent
+        //https://stackoverflow.com/questions/41670618/android-how-to-programatically-set-layout-constraintright-torightof-parent
         //https://juejin.im/entry/58b2fd59570c350069704265
 
 
@@ -139,16 +139,13 @@ public class MainActivity extends AppCompatActivity {
         textViewName.setId(R.id.textView_move_name);
         textViewName.setText(R.string.text_mvcount_name);
 
-        constraintLayout.addView(textViewName);
-
-
-
         layoutParams = new ConstraintLayout.LayoutParams(DisplayUtil.dip2px(85, displayParams.scale), DisplayUtil.dip2px(28, displayParams.scale));
 
-        layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+        //layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+        layoutParams.leftMargin = dpToPix_8;
 
         textViewName.setLayoutParams(layoutParams);
-
+        constraintLayout.addView(textViewName);
 
         //moveCount
         textViewMoveCount = new TextView(this);
@@ -158,7 +155,10 @@ public class MainActivity extends AppCompatActivity {
         textViewMoveCount.setText(mainViewModel.moveCount.get());
         layoutParams = new ConstraintLayout.LayoutParams(DisplayUtil.dip2px(113, displayParams.scale), DisplayUtil.dip2px(27, displayParams.scale));
 
-        layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+        //layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+        layoutParams.bottomMargin = dpToPix_8;
+        layoutParams.leftMargin = dpToPix_8;
+        layoutParams.topMargin = dpToPix_8;
         textViewName.setLayoutParams(layoutParams);
         constraintLayout.addView(textViewMoveCount);
 
@@ -168,7 +168,10 @@ public class MainActivity extends AppCompatActivity {
         help.setText(R.string.button_help_name);
         layoutParams = new ConstraintLayout.LayoutParams(DisplayUtil.dip2px(97, displayParams.scale), DisplayUtil.dip2px(37, displayParams.scale));
 
-        layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+        //layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+        layoutParams.rightMargin = dpToPix_8;
+        layoutParams.leftMargin = DisplayUtil.dip2px(64, displayParams.scale);
+
         help.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -183,9 +186,8 @@ public class MainActivity extends AppCompatActivity {
 
         FrameLayout.LayoutParams fLayoutParames = new FrameLayout.LayoutParams(DisplayUtil.dip2px(368, displayParams.scale), DisplayUtil.dip2px(342, displayParams.scale));
         fLayoutParames.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+        fLayoutParames.bottomMargin = dpToPix_8;
         f.setLayoutParams(fLayoutParames);
-
-
 
         mapView = new MapView(this);
         mapView.setId(R.id.mapview);
@@ -234,7 +236,14 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, mainViewModel.getLevels() );
         level_spinner.setAdapter(spinnerArrayAdapter);
-        level_spinner.setLayoutParams(new ConstraintLayout.LayoutParams(DisplayUtil.dip2px(136, displayParams.scale), DisplayUtil.dip2px(42, displayParams.scale)));
+
+        layoutParams = new ConstraintLayout.LayoutParams(DisplayUtil.dip2px(136, displayParams.scale), DisplayUtil.dip2px(42, displayParams.scale));
+
+        layoutParams.bottomMargin = dpToPix_8;
+        layoutParams.leftMargin = dpToPix_8;
+        layoutParams.topMargin = dpToPix_8;
+
+        level_spinner.setLayoutParams(layoutParams);
 
         level_spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -261,7 +270,10 @@ public class MainActivity extends AppCompatActivity {
 
         layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
 
-        layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+        //layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+        layoutParams.bottomMargin = dpToPix_8;
+        layoutParams.rightMargin = DisplayUtil.dip2px(24, displayParams.scale);
+
 
         reset.setLayoutParams(layoutParams);
 
@@ -281,7 +293,8 @@ public class MainActivity extends AppCompatActivity {
 
         layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
 
-        layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+        //layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+        layoutParams.rightMargin = dpToPix_8;
 
         pause.setLayoutParams(layoutParams);
 
@@ -312,11 +325,12 @@ public class MainActivity extends AppCompatActivity {
 
         save = new Button(this);
         save.setId(R.id.button_save);
-        save.setText(R.string.button_new_name);
+        save.setText(R.string.button_save_name);
 
         layoutParams = new ConstraintLayout.LayoutParams(DisplayUtil.dip2px(113, displayParams.scale), DisplayUtil.dip2px(49, displayParams.scale));
 
-        layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+        //layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+        layoutParams.rightMargin = DisplayUtil.dip2px(24, displayParams.scale);
 
         save.setLayoutParams(layoutParams);
 
@@ -336,7 +350,9 @@ public class MainActivity extends AppCompatActivity {
 
         layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
 
-        layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+        //layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+        layoutParams.bottomMargin = dpToPix_8;
+        layoutParams.leftMargin = dpToPix_8;
 
         loadByFile.setLayoutParams(layoutParams);
 
@@ -354,9 +370,12 @@ public class MainActivity extends AppCompatActivity {
         more.setText(R.string.button_more_name);
         layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.WRAP_CONTENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
 
-        layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+        //layoutParams.setMargins(dpToPix_8,dpToPix_8,dpToPix_8,dpToPix_8);
+        layoutParams.rightMargin = dpToPix_8;
 
         more.setLayoutParams(layoutParams);
+
+        constraintLayout.addView(more);
 
         if(mainViewModel == null){
             mainViewModel = new MainViewModel(this,level_string);
@@ -369,30 +388,31 @@ public class MainActivity extends AppCompatActivity {
         constraintSet.connect(f.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START, 0);
 
         constraintSet.connect(level_spinner.getId(), ConstraintSet.BOTTOM, loadByFile.getId(), ConstraintSet.TOP, 0);
-        constraintSet.connect(level_spinner.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START, 0);
+        constraintSet.connect(level_spinner.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START, dpToPix_8);
         constraintSet.connect(level_spinner.getId(), ConstraintSet.TOP, f.getId(), ConstraintSet.BOTTOM, 0);
 
         constraintSet.connect(reset.getId(), ConstraintSet.BOTTOM, save.getId(), ConstraintSet.TOP, 0);
-        constraintSet.connect(reset.getId(), ConstraintSet.END, save.getId(), ConstraintSet.START, 0);
+        constraintSet.connect(reset.getId(), ConstraintSet.END, pause.getId(), ConstraintSet.START,  DisplayUtil.dip2px(55, displayParams.scale));
 
 
         constraintSet.connect(pause.getId(), ConstraintSet.BASELINE, reset.getId(), ConstraintSet.BASELINE, 0);
-        constraintSet.connect(pause.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END, 0);
+        constraintSet.connect(pause.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END, dpToPix_8);
 
         constraintSet.setGuidelineBegin(guideline1.getId(), DisplayUtil.dip2px(451, displayParams.scale));
 
         constraintSet.connect(save.getId(), ConstraintSet.BASELINE, loadByFile.getId(), ConstraintSet.BASELINE, 0);
+        constraintSet.connect(save.getId(), ConstraintSet.START, loadByFile.getId(), ConstraintSet.END, 0);
         constraintSet.connect(save.getId(), ConstraintSet.END, more.getId(), ConstraintSet.START, 0);
 
         constraintSet.connect(more.getId(), ConstraintSet.BASELINE, save.getId(), ConstraintSet.BASELINE, 0);
-        constraintSet.connect(more.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END, 0);
+        constraintSet.connect(more.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END, dpToPix_8);
 
         constraintSet.connect(loadByFile.getId(), ConstraintSet.BOTTOM, constraintLayout.getId(), ConstraintSet.BOTTOM, 0);
-        constraintSet.connect(loadByFile.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START, 0);
+        constraintSet.connect(loadByFile.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START, dpToPix_8);
 
 
         constraintSet.connect(textViewName.getId(), ConstraintSet.BASELINE, textViewMoveCount.getId(), ConstraintSet.BASELINE, 0);
-        constraintSet.connect(textViewName.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START, 0);
+        constraintSet.connect(textViewName.getId(), ConstraintSet.START, constraintLayout.getId(), ConstraintSet.START, dpToPix_8);
 
         constraintSet.connect(textViewMoveCount.getId(), ConstraintSet.BOTTOM, f.getId(), ConstraintSet.TOP, 0);
         constraintSet.connect(textViewMoveCount.getId(), ConstraintSet.START, textViewName.getId(), ConstraintSet.END, 0);
@@ -403,7 +423,7 @@ public class MainActivity extends AppCompatActivity {
         constraintSet.connect(help.getId(), ConstraintSet.BASELINE, textViewMoveCount.getId(), ConstraintSet.BASELINE, 0);
         constraintSet.connect(help.getId(), ConstraintSet.END, constraintLayout.getId(), ConstraintSet.END, 0);
         constraintSet.setHorizontalBias(help.getId(),0.0F);
-        constraintSet.connect(help.getId(), ConstraintSet.START, textViewMoveCount.getId(), ConstraintSet.END, 0);
+        constraintSet.connect(help.getId(), ConstraintSet.START, textViewMoveCount.getId(), ConstraintSet.END, DisplayUtil.dip2px(185, displayParams.scale));
 
 
         constraintSet.applyTo(constraintLayout);
@@ -480,6 +500,7 @@ public class MainActivity extends AppCompatActivity {
         ViewBindingAdapter.setWallSquareStr(mapView, mainViewModel.wallSquareStr.get());
         minView.setWallSquareStr(mainViewModel.wallSquareStr.get());
         theView.setWallSquareStr(mainViewModel.wallSquareStr.get());
+        textViewMoveCount.setText(mainViewModel.moveCount.get());
     }
 
 
