@@ -127,10 +127,6 @@ public class MainActivity extends AppCompatActivity {
         constraintLayout.setLayoutParams(layoutParams);
 
         setContentView(constraintLayout);
-        //https://stackoverflow.com/questions/41670618/android-how-to-programatically-set-layout-constraintright-torightof-parent
-        //https://juejin.im/entry/58b2fd59570c350069704265
-
-
 
         int dpToPix_8 = DisplayUtil.dip2px(8, displayParams.scale);
 
