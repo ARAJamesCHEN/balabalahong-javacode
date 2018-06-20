@@ -768,16 +768,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        theDialog.setNegativeButton("Next Level", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                int theNum = mainViewModel.getGameModel().getLevelByLevelStr(level_string);
-                level_string = mainViewModel.getGameModel().getLevels()[theNum];
-                resetButtonClicked();
-                level_spinner.setSelection(theNum);
-            }
-        });
+        if(!level_string.equalsIgnoreCase("Level-10")){
+            theDialog.setNegativeButton("Next Level", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    int theNum = mainViewModel.getGameModel().getLevelByLevelStr(level_string);
+
+                    level_string = mainViewModel.getGameModel().getLevels()[theNum];
+                    resetButtonClicked();
+                    level_spinner.setSelection(theNum);
+                }
+            });
+        }
         theDialog.show();
     }
 
